@@ -96,3 +96,22 @@ class ThetaFilter:
         cv2.imshow("Filtered Image {} angle".format(self.theta), image_filtered)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+
+        return image_filtered
+
+    def filters_bank(self):
+        self.delta = 5
+        filter_bank = [0, 45, 90, 135]
+
+        processed_images = []
+
+        for i in filter_bank:
+            self.theta = i
+            processed_images.append(self.filtering())
+
+        numpy_cube = np.array(processed_images)
+        average_image = numpy_cube.mean(axis=0)
+
+        cv2.imshow("Average Image", average_image)
+        cv2.waitKey(0)
+        

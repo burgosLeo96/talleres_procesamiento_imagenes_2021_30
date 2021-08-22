@@ -25,8 +25,5 @@ if __name__ == '__main__':
     fftFilter.filtering(True)
 
     # Point 2
-    filter_bank = [0, 45, 90, 135]
-
-    for i in filter_bank:
-        fftFilter.set_theta(i, 5)
-        fftFilter.filtering(True)
+    fftFilter.filters_bank()
+    
