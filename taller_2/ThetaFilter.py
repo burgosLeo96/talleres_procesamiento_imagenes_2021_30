@@ -55,8 +55,8 @@ class ThetaFilter:
         angle_pass_mask = np.zeros_like(self.image)
 
         # First of all, find lower and upper bounds
-        lower_bound_0 = self.theta - self.delta
-        upper_bound_0 = self.theta + self.delta
+        lower_bound_0 = (self.theta - self.delta) % 360
+        upper_bound_0 = (self.theta + self.delta) % 360
 
         # If any of the limits are negative, add 360
         if lower_bound_0 < 0:
