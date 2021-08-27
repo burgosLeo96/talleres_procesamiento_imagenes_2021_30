@@ -104,14 +104,14 @@ class ThetaFilter:
         self.delta = 20
         filter_bank = [0, 45, 90, 135]
 
-        processed_images = []
+        processed_images = np.zeros_like(self.image, dtype=float)
 
         for i in filter_bank:
             self.theta = i
-            processed_images.append(self.filtering())
+            processed_images += self.filtering()
 
-        numpy_cube = np.array(processed_images)
-        average_image = numpy_cube.mean(axis=0)
+        processed_images = processed_images - processed_images.min()
+        average_image = processed_images / processed_images.max()
 
         cv2.imshow("Average Image", average_image)
         cv2.waitKey(0)
