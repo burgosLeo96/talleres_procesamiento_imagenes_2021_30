@@ -14,7 +14,7 @@ def process_limits(lower_bound, upper_bound, angles_matrix):
         idx_bitwise_0 = np.bitwise_and(lower_index_0, upper_index_0)
         idx_bitwise_1 = np.bitwise_and(lower_index_1, upper_index_1)
 
-        return np.logical_or(idx_bitwise_0, idx_bitwise_1)
+        return np.bitwise_or(idx_bitwise_0, idx_bitwise_1)
 
     else:
         lower_index = angles_matrix > lower_bound
@@ -46,7 +46,7 @@ class ThetaFilter:
         enum_rows = np.linspace(0, num_rows - 1, num_rows)
         enum_cols = np.linspace(0, num_cols - 1, num_cols)
         col_iter, row_iter = np.meshgrid(enum_cols, enum_rows)
-        half_size = num_rows / 2 - 1  # here we assume num_rows = num_columns
+        half_size = num_rows / 2  # here we assume num_rows = num_columns
 
         # get the matrix of angles
         angles_matrix = np.arctan2((col_iter - half_size), (row_iter - half_size)) * 180 / np.pi
@@ -72,6 +72,7 @@ class ThetaFilter:
         upper_bound_1 = (upper_bound_0 + 180) % 360
 
         angle_pass_mask[process_limits(lower_bound_1, upper_bound_1, angles_matrix)] = 1
+        angle_pass_mask[int(half_size), int(half_size)] = 1
 
         fft_filtered_shift = image_gray_fft_shift * angle_pass_mask
         fft_filtered_mag = np.absolute(fft_filtered_shift)
@@ -100,7 +101,7 @@ class ThetaFilter:
         return image_filtered
 
     def filters_bank(self):
-        self.delta = 5
+        self.delta = 20
         filter_bank = [0, 45, 90, 135]
 
         processed_images = []
