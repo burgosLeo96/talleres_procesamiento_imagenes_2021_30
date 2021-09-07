@@ -1,13 +1,11 @@
-import cv2
-import numpy as np
 from DecimationFilter import *
 
+low_pass_filter = np.array([[1/16, 1/8, 1/16], [1/8, 1/4, 1/8], [1/16, 1/8, 1/16]])
 horizontal_filter = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
 vertical_filter = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
 diagonal_filter = np.array([[2, -1, -2], [-1, 4, -1], [-2, -1, 2]])
-low_pass_filter = np.array([[1/16, 1/8, 1/16], [1/8, 1/4, 1/8], [1/16, 1/8, 1/16]])
 
-filters_bank = [horizontal_filter, vertical_filter, diagonal_filter, low_pass_filter]
+filters_bank = [low_pass_filter, horizontal_filter, vertical_filter, diagonal_filter]
 
 
 def decomposition_bank_filter(image, n_value):
