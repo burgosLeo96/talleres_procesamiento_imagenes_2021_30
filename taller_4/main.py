@@ -39,7 +39,7 @@ def detectCorners(quad_image):
     image_draw = np.copy(quad_image)
 
     # Then, calculate hough lines using opencv HoughLines method
-    hough_lines = cv2.HoughLines(bw_edges, 1, np.pi / 180, 100)
+    hough_lines = cv2.HoughLines(bw_edges, 1, np.pi / 180, round(0.25 * image_draw.shape[0]))
 
     cv2.imshow("BW_edges", bw_edges)
     cv2.waitKey(0)
