@@ -25,8 +25,6 @@ def intersection(line1, line2):
         x0, y0 = np.linalg.solve(m, b)
         return [int(np.round(x0)), int(np.round(y0))]
     except LinAlgError as e:
-        print("Error: ", e)
-        print("Lines does not intersect")
         return []
 
 
@@ -43,6 +41,10 @@ def detectCorners(quad_image):
 
     cv2.imshow("BW_edges", bw_edges)
     cv2.waitKey(0)
+
+    if len(hough_lines == 0):
+        print("No lines where founded")
+        sys.exit(1)
 
     # Paint the hough lines
     for line in hough_lines:
