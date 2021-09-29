@@ -74,7 +74,7 @@ def detectCorners(quad_image):
     intersections[:] = [inter for inter in intersections if (max_x > inter[0] >= 0) or (max_y > inter[1] >= 0)]
 
     for point in intersections:
-        cv2.circle(quad_image, (point[0], point[1]), 5, (0, 0, 0), -1)
+        cv2.circle(quad_image, (point[0], point[1]), 5, (0, 255, 255), -1)
 
     cv2.imshow("Image draw", image_draw)
     cv2.waitKey(0)
