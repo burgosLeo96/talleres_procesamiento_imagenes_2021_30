@@ -13,6 +13,7 @@ def click_event(event, x, y, flags, param):
         points_list.append((x, y))
 
 
+# main method
 if __name__ == '__main__':
     # Validate the argv length
     if len(sys.argv) < 2:
@@ -56,20 +57,28 @@ if __name__ == '__main__':
         # Concatenate horizontally the images
         concatenated_images = cv2.hconcat([left_image, right_image])
 
+        # Define offset for points chosen in right image
         offset = left_image.shape[1]
 
         rendered_points = 0
         while True:
+            # Display the concatenated images while not enough points are selected
             cv2.imshow("Images", concatenated_images)
             key = cv2.waitKey(1) & 0xFF
+
+            # The 'x' key was pressed, points_list is processed
             if key == ord('x'):
+                # Evaluate that points_list has at least 8 points (4 per image)
                 if len(points_list) < 8:
                     print("Please select at least 4 points per image.")
                 else:
+                    # Get the points chosen for left and right images
                     left_image_points = points_list[0::2]
                     right_image_points = points_list[1::2]
+                    # For each right_image point, subtract the offset
                     right_image_points = list(
                         map(lambda coordinates: (coordinates[0] - offset, coordinates[1]), right_image_points))
+                    # Append the points in the points_list
                     images_points_list.append(left_image_points)
                     images_points_list.append(right_image_points)
                     points_list = []
@@ -85,17 +94,22 @@ if __name__ == '__main__':
                 else:
                     cv2.circle(concatenated_images, (points_list[-1][0], points_list[-1][1]), 3, [255, 0, 0], -1)
 
+    # Close window where the concatenated image where shown
     cv2.destroyWindow("Images")
     homography_list = []
 
     # Calculate homography matrix per each couple of points
     indexes = np.arange(0, len(images_points_list), 2)
     for i in indexes:
+        # Select the minimum quantity of points between the pair of points_list that are going to be processed
         N = min(len(images_points_list[i]), len(images_points_list[i + 1]))
         source_points = np.array(images_points_list[i][:N])
         target_points = np.array(images_points_list[i + 1][:N])
 
+        # Compute the homography between the two points_lists
         homography, _ = cv2.findHomography(source_points, target_points, method=cv2.RANSAC)
+
+        # Append homography matrix to homography_list
         homography_list.append(homography)
 
     # Steps to calculate images perspectives:
@@ -111,8 +125,10 @@ if __name__ == '__main__':
     result_images = []
     reference_image_index -= 1
     for i in range(len(cv2_images_list)):
+        # Default scenario: image index is equal to current index
         res_image = cv2_images_list[i]
 
+        # Scenario 2: image index is less than the reference image index
         if i < reference_image_index:
             matrix_accum = homography_list[i]
             for j in range(i + 1, reference_image_index):
@@ -120,6 +136,7 @@ if __name__ == '__main__':
 
             res_image = cv2.warpPerspective(res_image, matrix_accum, (res_image.shape[1], res_image.shape[0]))
 
+        # Scenario 3: image index is greater that the reference image index
         elif i > reference_image_index:
             matrix_accum = homography_list[reference_image_index]
 
@@ -129,6 +146,7 @@ if __name__ == '__main__':
             inverse_homography = np.linalg.inv(matrix_accum)
             res_image = cv2.warpPerspective(res_image, inverse_homography, (res_image.shape[1], res_image.shape[0]))
 
+        # Append result image to result_images list
         result_images.append(res_image)
 
     # Finally, compute average
@@ -150,6 +168,7 @@ if __name__ == '__main__':
 
     result = cv2.imread("result_image.jpg")
 
+    # Show result image through "Result" window
     cv2.namedWindow("Result", cv2.WINDOW_NORMAL)
     cv2.imshow("Result", result)
     cv2.waitKey(0)
