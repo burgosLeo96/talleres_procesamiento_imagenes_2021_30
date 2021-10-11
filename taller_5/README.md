@@ -6,7 +6,7 @@
 - Clonar el repositorio
 - Dentro de la carpeta "taller 5" del repositorio, ejecutar la siguiente sentencia por línea de comandos:
 ```sh
-python main.py directorio_donde_se_encuentran_las_imágenes>
+python main.py <directorio_donde_se_encuentran_las_imágenes>
 ```
 
 - El directorio recibido debe contener una lista de imágenes nombradas de la manera "image_(número).jpg" de manera
