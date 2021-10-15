@@ -67,9 +67,6 @@ if __name__ == '__main__':
         matched_points = bf.knnMatch(left_image_desc, right_image_desc, k=1)
         matches_image = cv2.drawMatchesKnn(left_image, kp_1, right_image, kp_2, matched_points, None)
 
-        filename = "matches_" + str(i) + "_" + str(i-1) + ".jpg"
-        cv2.imwrite(filename, matches_image)
-
         # Then, retrieve matched points and store them
         left_image_points = []
         right_image_points = []
@@ -148,10 +145,10 @@ if __name__ == '__main__':
     perspective_result = np.rint(perspective_result)
 
     # Save results
-    cv2.imwrite("result_image.jpg", perspective_result)
+    cv2.imwrite(images_path + "/result_image.jpg", perspective_result)
     print("Output file --result_image.jpg-- created.")
 
-    result = cv2.imread("result_image.jpg")
+    result = cv2.imread(images_path + "/result_image.jpg")
 
     # Show result image through "Result" window
     cv2.namedWindow("Result", cv2.WINDOW_NORMAL)
