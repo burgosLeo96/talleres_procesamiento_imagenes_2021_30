@@ -50,6 +50,8 @@ if __name__ == '__main__':
         right_image = cv2_images_list[i]
 
         # Compute interest points using SIFT technique
+        # BF parameters defined according to
+        # https://opencv24-python-tutorials.readthedocs.io/en/stable/py_tutorials/py_feature2d/py_matcher/py_matcher.html
         if interest_points_tec == 'SIFT':
             sift = cv2.SIFT_create(nfeatures=100)
             bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
